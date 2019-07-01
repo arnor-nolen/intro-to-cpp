@@ -1,23 +1,29 @@
 #include <iostream>
 using namespace std;
 
+void rotate_by_one(int a[], unsigned size)
+{
+    int last;
+    for (int i = 0; i < size; i++)
+    {
+        int address = i - 2;
+        address = address >= 0 ? address : address + size;
+        if (i == 0)
+            last = a[size - 1];
+        a[address] = a[i];
+        if (i == size - 1)
+            a[size - 2] = last;
+    }
+    return;
+}
+
 void rotate(int a[], unsigned size, int shift)
 {
     int real_shift = shift % size;
     if (real_shift == 0)
         return;
-
-    int last;
-    for (int i = 0; i < size; i++)
-    {
-        int address = i - real_shift;
-        address = address >= 0 ? address : address + size;
-        if (i == 0)
-            last = a[size - real_shift];
-        a[address] = a[i];
-        if (i == size - 1)
-            a[size - real_shift - 1] = last;
-    }
+    for (int i = 0; i < real_shift; i++)
+        rotate_by_one(a, size);
     return;
 }
 
