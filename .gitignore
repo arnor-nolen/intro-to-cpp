@@ -1,3 +1,7 @@
+# Compiled binaries with linker information
+bin
+.vscode/ipch
+
 # VS Code
 *.code-workspace
 
