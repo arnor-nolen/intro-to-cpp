@@ -48,11 +48,11 @@ struct BinaryOperation : Expression {
   char op;
 };
 
-// Checking if object are of the same class (All the hacking is here!)
+// Checking if objects are of the same class (All the hacking is here!)
 bool check_equals(Expression const* left, Expression const* right) {
   // Virtual function pointers take 4 bytes in memory for x86
-  // or 8 bytes for x86_64
-  const size_t ptrSize = 8;
+  // and 8 bytes for x86_64
+  const size_t ptrSize = 8;  // Adjust for your system!!
   long** leftVtable = (long**)&left;
   long** rightVtable = (long**)&right;
   int sizeLeftVtable = sizeof(leftVtable) / ptrSize;
