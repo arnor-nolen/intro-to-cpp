@@ -1,6 +1,6 @@
 # Introduction to C++
 
-Course excercises from Stepik.org course "Introduction to C++" (In russian).
+Course excercises from Stepik.org course ["Introduction to C++" (In russian)](https://stepik.org/course/7).
 
 Small programs didn't make it in this repository, since it was much easier to code them on Stepik directly.
 
