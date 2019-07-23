@@ -11,7 +11,7 @@ However, if you plan to enroll to these courses yourself, please, **don't use th
 **P.P.S** Here I will attach links to the certificates as I get them.
 
 - ["Programming in C++"](https://stepik.org/certificate/d86f5e6fa0420df1440e14f759a89a5a3e558e41.pdf) (with distinction, 100% completion);
-- "Programming in C++ (cont.)".
+- "Programming in C++ (cont.)" (in progress).
 
 ## Most useful exercises
 
