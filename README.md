@@ -2,8 +2,6 @@
 
 Course excercises from Stepik.org courses ["Programming in C++"](https://stepik.org/course/7) and ["Programming in C++ (cont.)"](https://stepik.org/course/3206).
 
-First **29 tasks** are from the first course, the rest is from the second course.
-
 Both courses are taught **in russian** and free for use. I strongly encourage everyone that is interested in C++ to complete these courses.
 
 However, if you plan to enroll to these courses yourself, please, **don't use these solutions**. The repository is mainly for myself to keep track and review my progress as I go.
