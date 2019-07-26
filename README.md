@@ -23,4 +23,4 @@ However, if you plan to enroll to these courses yourself, please, **don't use th
 
 ### Programming in C++ (cont.)
 
-- [Task 4: Checking types](./programming_in_cpp_cont/task_4_checking_types/main.cpp) (Same task as Task 14 from first course, but using typeid).
+- [Task 4: Checking types](./programming_in_cpp_cont/task_4_checking_types/main.cpp) (Same task as Task 18 from first course, but using typeid).
