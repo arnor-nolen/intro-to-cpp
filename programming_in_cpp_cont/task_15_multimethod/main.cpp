@@ -13,7 +13,8 @@ struct Triangle : Shape {};
 bool is_intersect_r_r(Shape *a, Shape *b) { return true; };
 bool is_intersect_r_t(Shape *a, Shape *b) { return true; };
 
-template <class Base, class Result, bool Commutative> struct Multimethod2 {
+template <class Base, class Result, bool Commutative>
+struct Multimethod2 {
   void addImpl(std::type_index t1, std::type_index t2,
                std::function<Result(Base *a, Base *b)> f) {
     map_.insert({{t1, t2}, f});
@@ -22,20 +23,18 @@ template <class Base, class Result, bool Commutative> struct Multimethod2 {
   bool hasImpl(Base *a, Base *b) const {
     auto pair = {std::type_index(typeid(*a)), std::type_index(typeid(*b))};
     bool swapped = false;
-    if (findImpl(a, b, swapped) != map_.end())
-      return true;
+    if (findImpl(a, b, swapped) != map_.end()) return true;
     return false;
   }
 
   Result call(Base *a, Base *b) const {
     bool swapped = false;
     auto func = findImpl(a, b, swapped)->second;
-    if (!swapped)
-      return func(a, b);
+    if (!swapped) return func(a, b);
     return func(b, a);
   }
 
-private:
+ private:
   std::map<std::pair<std::type_index, std::type_index>,
            std::function<Result(Base *a, Base *b)>>
       map_;
