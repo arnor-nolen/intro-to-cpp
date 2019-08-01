@@ -2,15 +2,14 @@
 #include <list>
 #include <vector>
 
-template <class T>
-class VectorList {
- private:
+template <class T> class VectorList {
+private:
   using VectT = std::vector<T>;
   using ListT = std::list<VectT>;
   using ListTIt = typename ListT::const_iterator;
   using VectTIt = typename VectT::const_iterator;
 
- public:
+public:
   using value_type = T;
 
   VectorList() = default;
@@ -20,9 +19,9 @@ class VectorList {
   VectorList &operator=(VectorList &&) = default;
   VectorList &operator=(VectorList const &) = default;
 
-  template <class It>
-  void append(It p, It q) {
-    if (p != q) data_.push_back(VectT(p, q));
+  template <class It> void append(It p, It q) {
+    if (p != q)
+      data_.push_back(VectT(p, q));
   }
 
   bool empty() const { return size() == 0; }
@@ -48,14 +47,35 @@ class VectorList {
       ++vector_it_;
       if (vector_it_ == (*list_it_).end()) {
         ++list_it_;
-        if (list_it_ == p_->end()) {
+        if (list_it_ == p_->end())
           return *this;
-        }
         vector_it_ = (*list_it_).begin();
       }
       return *this;
     }
-    // const_iterator &operator--() { return --vector_it_; }
+    const_iterator operator++(int) {
+      auto temp = *this;
+      ++*this;
+      return temp;
+    }
+
+    const_iterator &operator--() {
+      if (list_it_ == p_->end())
+        --list_it_;
+      if (vector_it_ == (*list_it_).begin()) {
+        if (list_it_ == p_->begin())
+          return *this;
+        --list_it_;
+        vector_it_ = (*list_it_).end();
+      }
+      --vector_it_;
+      return *this;
+    }
+    const_iterator operator--(int) {
+      auto temp = *this;
+      --*this;
+      return temp;
+    }
 
     bool operator==(const const_iterator &other) const {
       return list_it_ == other.list_it_ && vector_it_ == other.vector_it_ &&
@@ -67,7 +87,7 @@ class VectorList {
 
     value_type operator*() { return *vector_it_; }
 
-   private:
+  private:
     ListTIt list_it_;
     VectTIt vector_it_;
     ListT const *p_;
@@ -94,7 +114,7 @@ class VectorList {
   // }
   // const_reverse_iterator rend() const { return ...; }
 
- private:
+private:
   ListT data_;
 };
 
@@ -119,27 +139,30 @@ int main() {
   std::cout << std::endl;
 
   std::cout << "Test ++i" << std::endl;
-  for (i = vlist.begin(); i != vlist.end(); ++i) std::cout << *i << " ";
+  for (i = vlist.begin(); i != vlist.end(); ++i)
+    std::cout << *i << " ";
   std::cout << std::endl;
   std::cout << std::endl;
 
-  // std::cout << "Test i++" << std::endl;
-  // for (i = vlist.begin(); i != vlist.end(); i++) std::cout << *i << " ";
-  // std::cout << std::endl;
-  // std::cout << std::endl;
+  std::cout << "Test i++" << std::endl;
+  for (i = vlist.begin(); i != vlist.end(); i++)
+    std::cout << *i << " ";
+  std::cout << std::endl;
+  std::cout << std::endl;
 
-  // std::cout << "Test --i" << std::endl;
-  // for (i = vlist.end(); i != vlist.begin();) std::cout << *--i << " ";
-  // std::cout << std::endl;
-  // std::cout << std::endl;
+  std::cout << "Test --i" << std::endl;
+  for (i = vlist.end(); i != vlist.begin();)
+    std::cout << *--i << " ";
+  std::cout << std::endl;
+  std::cout << std::endl;
 
-  // std::cout << "Test i--" << std::endl;
-  // for (i = vlist.end(); i != vlist.begin();) {
-  //   i--;
-  //   std::cout << *i << " ";
-  // }
-  // std::cout << std::endl;
-  // std::cout << std::endl;
+  std::cout << "Test i--" << std::endl;
+  for (i = vlist.end(); i != vlist.begin();) {
+    i--;
+    std::cout << *i << " ";
+  }
+  std::cout << std::endl;
+  std::cout << std::endl;
 
   // std::cout << std::endl;
   // auto j = vlist.rbegin();
