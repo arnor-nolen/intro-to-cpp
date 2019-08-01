@@ -35,8 +35,7 @@ public:
   }
 
   struct const_iterator
-      : std::iterator<std::bidirectional_iterator_tag, const value_type, int,
-                      const value_type *, const value_type &> {
+      : std::iterator<std::bidirectional_iterator_tag, const value_type> {
     const_iterator() = default;
     const_iterator(const const_iterator &other) = default;
     const_iterator(ListTIt &list_it, VectTIt &vector_it, ListT const *p)
@@ -45,12 +44,10 @@ public:
     ~const_iterator() = default;
 
     const_iterator &operator++() {
-      ++vector_it_;
-      if (vector_it_ == (*list_it_).end()) {
-        ++list_it_;
-        if (list_it_ == p_->end())
+      if (++vector_it_ == list_it_->cend()) {
+        if (++list_it_ == p_->cend())
           return *this;
-        vector_it_ = (*list_it_).begin();
+        vector_it_ = list_it_->cbegin();
       }
       return *this;
     }
@@ -61,13 +58,13 @@ public:
     }
 
     const_iterator &operator--() {
-      if (list_it_ == p_->end())
+      if (list_it_ == p_->cend())
         --list_it_;
-      if (vector_it_ == (*list_it_).begin()) {
-        if (list_it_ == p_->begin())
+      if (vector_it_ == list_it_->cbegin()) {
+        if (list_it_ == p_->cbegin())
           return *this;
         --list_it_;
-        vector_it_ = (*list_it_).end();
+        vector_it_ = list_it_->cend();
       }
       --vector_it_;
       return *this;
@@ -95,13 +92,17 @@ public:
   };
 
   const_iterator begin() const {
-    auto list_it = data_.begin();
-    auto vector_it = size() ? data_.front().begin() : VectTIt();
+    if (empty())
+      return const_iterator();
+    auto list_it = data_.cbegin();
+    auto vector_it = data_.front().cbegin();
     return const_iterator(list_it, vector_it, &data_);
   }
   const_iterator end() const {
-    auto list_it = data_.end();
-    auto vector_it = size() ? data_.back().end() : VectTIt();
+    if (empty())
+      return const_iterator();
+    auto list_it = data_.cend();
+    auto vector_it = data_.back().cend();
     return const_iterator(list_it, vector_it, &data_);
   }
 
