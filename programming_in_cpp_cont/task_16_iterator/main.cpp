@@ -35,12 +35,13 @@ public:
   }
 
   struct const_iterator
-      : std::iterator<std::bidirectional_iterator_tag, value_type, value_type,
-                      value_type *, value_type &> {
+      : std::iterator<std::bidirectional_iterator_tag, const value_type, int,
+                      const value_type *, const value_type &> {
     const_iterator() = default;
     const_iterator(const const_iterator &other) = default;
     const_iterator(ListTIt &list_it, VectTIt &vector_it, ListT const *p)
         : list_it_(list_it), vector_it_(vector_it), p_(p) {}
+    const_iterator &operator=(const const_iterator &) = default;
     ~const_iterator() = default;
 
     const_iterator &operator++() {
@@ -78,14 +79,14 @@ public:
     }
 
     bool operator==(const const_iterator &other) const {
-      return list_it_ == other.list_it_ && vector_it_ == other.vector_it_ &&
-             p_ == other.p_;
+      return vector_it_ == other.vector_it_;
     }
     bool operator!=(const const_iterator &other) const {
       return !operator==(other);
     }
 
-    value_type operator*() { return *vector_it_; }
+    const value_type &operator*() const { return *vector_it_; }
+    const value_type *operator->() const { return &*vector_it_; };
 
   private:
     ListTIt list_it_;
@@ -95,24 +96,23 @@ public:
 
   const_iterator begin() const {
     auto list_it = data_.begin();
-    auto vector_it = data_.front().begin();
+    auto vector_it = size() ? data_.front().begin() : VectTIt();
     return const_iterator(list_it, vector_it, &data_);
   }
   const_iterator end() const {
     auto list_it = data_.end();
-    auto vector_it = data_.back().end();
+    auto vector_it = size() ? data_.back().end() : VectTIt();
     return const_iterator(list_it, vector_it, &data_);
   }
 
-  // определите const_reverse_iterator
-  //... const_reverse_iterator...
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-  // определите методы rbegin / rend
-  //     const_reverse_iterator
-  //     rbegin() const {
-  //   return ...;
-  // }
-  // const_reverse_iterator rend() const { return ...; }
+  const_reverse_iterator rbegin() const {
+    return const_reverse_iterator(end());
+  }
+  const_reverse_iterator rend() const {
+    return const_reverse_iterator(begin());
+  }
 
 private:
   ListT data_;
@@ -164,15 +164,16 @@ int main() {
   std::cout << std::endl;
   std::cout << std::endl;
 
-  // std::cout << std::endl;
-  // auto j = vlist.rbegin();
-  // std::cout << "rbegin is " << *j << std::endl;
-  // j = --vlist.rend();
-  // std::cout << "--rend is " << *j << std::endl;
+  auto j = vlist.rbegin();
+  std::cout << "rbegin is " << *j << std::endl;
+  j = --vlist.rend();
+  std::cout << "rend is " << *j << std::endl;
+  std::cout << std::endl;
 
-  // std::cout << "Test reverse_const_iterator ++" << std::endl;
-  // for (j = vlist.rbegin(); j != vlist.rend(); ++j) std::cout << *j << " ";
-  // std::cout << std::endl;
+  std::cout << "Test reverse_const_iterator ++" << std::endl;
+  for (j = vlist.rbegin(); j != vlist.rend(); ++j)
+    std::cout << *j << " ";
+  std::cout << std::endl;
 
   return 0;
 }
