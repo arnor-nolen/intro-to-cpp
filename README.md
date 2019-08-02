@@ -19,8 +19,9 @@ However, if you plan to enroll to these courses yourself, please, **don't use th
 
 - [Task 14: Hacking classes](./programming_in_cpp/task_14_hacking_class/main.cpp) (Getting access to private members of a class);
 - [Task 18: Hacking vtables](./programming_in_cpp/task_18_hacking_vtables/main.cpp) (Checking if classes are of the same type using vtables, which C++ does not allow);
-- [Task 25: Shared pointer](./programming_in_cpp/task_25_smart_pointer_shared/main.cpp) (Creating custom shared_ptr).
+- [Task 25: Shared pointer](./programming_in_cpp/task_25_smart_pointer_shared/main.cpp) (Creating custom `shared_ptr`).
 
 ### Programming in C++ (cont.)
 
-- [Task 4: Checking types](./programming_in_cpp_cont/task_4_checking_types/main.cpp) (Same task as Task 18 from first course, but using typeid).
+- [Task 4: Checking types](./programming_in_cpp_cont/task_4_checking_types/main.cpp) (Same task as Task 18 from the first course, but using `typeid`);
+- [Task 16: Custom iterator](./programming_in_cpp_cont/task_16_custom_iterator/main.cpp) (Writing custom iterator for `std::list<std::vector\<T>>`).
