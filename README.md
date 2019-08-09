@@ -25,4 +25,5 @@ However, if you plan to enroll to these courses yourself, please, **don't use th
 
 - [Task 4: Checking types](./programming_in_cpp_cont/task_4_checking_types/main.cpp) (Same task as Task 18 from the first course, but using `typeid`);
 - [Task 16: Custom iterator](./programming_in_cpp_cont/task_16_custom_iterator/main.cpp) (Writing custom iterator for `std::list<std::vector\<T>>`);
-- [Task 21: MapReduce](./programming_in_cpp_cont/task_21_map_reduce/main.cpp) (Writing custom MapReduce using `std::async`).
+- [Task 21: MapReduce](./programming_in_cpp_cont/task_21_map_reduce/main.cpp) (Writing custom MapReduce using `std::async`);
+- [Task 27: Unpacking tuples](./programming_in_cpp_cont/task_27_tuples_meta/main.cpp) (Unpacking tuples using variadic templates and metaprogramming).
