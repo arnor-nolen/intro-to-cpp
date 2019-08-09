@@ -1,35 +1,42 @@
-#include <array>
 #include <future>
 #include <iostream>
 #include <list>
+#include <vector>
 
 template <typename IterT, typename F1, typename F2>
-auto calculate(IterT p, IterT q, F1 f1, F2 f2) -> decltype(f1(*p)) {
-  auto result = f1(*p);
-  while (++p != q)
-    result = f2(result, f1(*p));
-  return result;
-}
-
-template <typename IterT, typename F1, typename F2>
-using return_type = F1(*IterT);
-auto map_reduce(IterT p, IterT q, F1 f1, F2 f2, size_t threads) -> return_type {
+auto map_reduce(IterT p, IterT q, const F1 &f1, const F2 &f2,
+                const size_t threads) -> decltype(f1(*p)) {
+  using return_type = decltype(f1(*p));
   size_t distance = std::distance(p, q);
-  size_t thread_distance = distance / threads + 1;
-  std::array<std::future<return_type>> result_array[distance];
-  size_t i = 0;
-  while (p != q) {
-    if (true)
-      auto promise = std::async(std::launch::async, calculate<IterT, F1, F2>, p,
-                                q, f1, f2);
-    ++i;
-    ++p;
-  }
+  size_t thread_distance = distance / threads;
+  std::vector<std::future<return_type>> promises;
+  size_t thread_id = 0;
+  size_t thread_size = 0;
+  IterT thread_start = p;
 
-  return_type result;
-  // Change to f2
-  for (auto &i : result_array) {
-    result += result_array[i].get();
+  auto chunk_map_reduce = [&f1, &f2](IterT p, IterT q) {
+    auto result = f1(*p);
+    while (++p != q)
+      result = f2(result, f1(*p));
+    return result;
+  };
+
+  while (thread_id != threads - 1) {
+    ++p;
+    if (++thread_size == thread_distance) {
+      promises.push_back(std::move(
+          std::async(std::launch::async, chunk_map_reduce, thread_start, p)));
+      ++thread_id;
+      thread_size = 0;
+      thread_start = p;
+    }
+  }
+  promises.push_back(std::move(
+      std::async(std::launch::async, chunk_map_reduce, thread_start, q)));
+
+  return_type result(promises[0].get());
+  for (size_t i = 1; i != promises.size(); ++i) {
+    result = f2(result, promises[i].get());
   }
   return result;
 }
