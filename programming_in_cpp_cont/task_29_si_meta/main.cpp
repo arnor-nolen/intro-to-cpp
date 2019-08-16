@@ -51,30 +51,95 @@ template <int m = 0, int kg = 0, int s = 0, int A = 0, int K = 0, int mol = 0,
 using Dimension = IntList<m, kg, s, A, K, mol, cd>;
 
 // -----Code is here-----
-template <Dimension<> D> struct Quantity {};
+template <typename D> struct Quantity;
+template <int... Integers> struct Quantity<IntList<Integers...>> {
+  Quantity() : v(0){};
+  explicit Quantity(double val) : v(val){};
+  double value() const { return v; }
+  double const v;
+};
 
+// Sum
+template <int... Integers>
+Quantity<IntList<Integers...>>
+operator+(const Quantity<IntList<Integers...>> &lhs,
+          const Quantity<IntList<Integers...>> &rhs) {
+  return Quantity<IntList<Integers...>>(lhs.v + rhs.v);
+}
+
+// Subtraction
+template <int... Integers>
+Quantity<IntList<Integers...>>
+operator-(const Quantity<IntList<Integers...>> &lhs,
+          const Quantity<IntList<Integers...>> &rhs) {
+  return Quantity<IntList<Integers...>>(lhs.v - rhs.v);
+}
+
+// Multiplication
+template <int... Ints1, int... Ints2>
+Quantity<IntList<(Ints1 + Ints2)...>>
+operator*(const Quantity<IntList<Ints1...>> &lhs,
+          const Quantity<IntList<Ints2...>> &rhs) {
+  return Quantity<IntList<(Ints1 + Ints2)...>>(lhs.v * rhs.v);
+}
+template <int... Ints2>
+Quantity<IntList<Ints2...>> operator*(const double &lhs,
+                                      const Quantity<IntList<Ints2...>> &rhs) {
+  return Quantity<IntList<Ints2...>>(lhs * rhs.v);
+}
+template <int... Ints1>
+Quantity<IntList<Ints1...>> operator*(const Quantity<IntList<Ints1...>> &lhs,
+                                      const double &rhs) {
+  return Quantity<IntList<Ints1...>>(lhs.v * rhs);
+}
+
+// Division
+template <int... Ints1, int... Ints2>
+Quantity<IntList<(Ints1 - Ints2)...>>
+operator/(const Quantity<IntList<Ints1...>> &lhs,
+          const Quantity<IntList<Ints2...>> &rhs) {
+  return Quantity<IntList<(Ints1 - Ints2)...>>(lhs.v / rhs.v);
+}
+template <int... Ints2>
+Quantity<IntList<-Ints2...>> operator/(const double &lhs,
+                                       const Quantity<IntList<Ints2...>> &rhs) {
+  return Quantity<IntList<-Ints2...>>(lhs / rhs.v);
+}
+template <int... Ints1>
+Quantity<IntList<Ints1...>> operator/(const Quantity<IntList<Ints1...>> &lhs,
+                                      const double &rhs) {
+  return Quantity<IntList<Ints1...>>(lhs.v / rhs);
+}
 // -----End of code-----
 
-using NumberQ = Quantity<Dimension<>>; // число без размерности
-using LengthQ = Quantity<Dimension<1>>;          // метры
-using MassQ = Quantity<Dimension<0, 1>>;         // килограммы
-using TimeQ = Quantity<Dimension<0, 0, 1>>;      // секунды
-using VelocityQ = Quantity<Dimension<1, 0, -1>>; // метры в секунду
-using AccelQ =
-    Quantity<Dimension<1, 0, -2>>; // ускорение, метры в секунду в квадрате
-using ForceQ = Quantity<Dimension<1, 1, -2>>; // сила в ньютонах
+using NumberQ = Quantity<Dimension<>>;
+using LengthQ = Quantity<Dimension<1>>;
+using MassQ = Quantity<Dimension<0, 1>>;
+using TimeQ = Quantity<Dimension<0, 0, 1>>;
+using VelocityQ = Quantity<Dimension<1, 0, -1>>;
+using AccelQ = Quantity<Dimension<1, 0, -2>>;
+using ForceQ = Quantity<Dimension<1, 1, -2>>;
 
 int main() {
 
-  LengthQ l{30000}; // 30 км
-  TimeQ t{10 * 60}; // 10 минут
-  // вычисление скорости
-  VelocityQ v = l / t; // результат типа VelocityQ, 50 м/с
+  LengthQ l(30000);
+  TimeQ t{10 * 60};
+  TimeQ t2{20 * 60};
+  auto t3 = t + t2;
+  std::cout << t3.value() << " " << typeid(t3).name() << std::endl;
+  auto t4 = t2 - t;
+  std::cout << t4.value() << " " << typeid(t4).name() << std::endl;
+  VelocityQ v = l / t;
+  std::cout << v.value() << " " << typeid(v).name() << std::endl;
 
-  AccelQ a{9.8}; // ускорение свободного падения
-  MassQ m{80};   // 80 кг
-  // сила притяжения, которая действует на тело массой 80 кг
-  ForceQ f = m * a; // результат типа ForceQ
+  AccelQ a{9.8};
+  MassQ m{80};
+  ForceQ f = m * a;
+  std::cout << f.value() << " " << typeid(f).name() << std::endl;
+
+  LengthQ l2{10000};
+  auto l3 = 2.0 / l2;
+  std::cout << l3.value() << " " << typeid(l3).name() << std::endl;
 
   return 0;
 }
